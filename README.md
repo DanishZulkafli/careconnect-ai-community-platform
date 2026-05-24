@@ -1,46 +1,59 @@
-# AI Career Skill Matcher
+# CareConnect AI — Community Help & Skill Matching Platform
 
-AI Career Skill Matcher is a simple interactive web application that helps users discover suitable technology career paths based on their current skills.
+CareConnect AI is a Python Flask web application designed to connect people who need help with people who can offer help.
 
-The project uses HTML, CSS, and JavaScript to calculate a career match score and recommend suitable next skills.
+The project uses an AI-style matching algorithm to recommend suitable community matches based on skills, categories, urgency, and availability.
 
 ## Features
 
-- Select current technical skills
-- Match skills with suitable tech career roles
-- Show career match percentage
-- Recommend next skills to learn
-- Responsive and clean user interface
-- Beginner-friendly JavaScript logic
+- User registration and login
+- Offer help to the community
+- Request help from the community
+- AI-style match recommendation
+- Skill-based matching score
+- Category and urgency matching
+- Volunteer points system
+- Community impact dashboard
+- User badge system
+- SQLite database
+- Responsive interface
 
-## Career Roles Included
+## Community Use Cases
 
-- Frontend Developer
-- WordPress Developer
-- Backend Developer
-- Data Analyst
-- AI / Machine Learning Developer
+CareConnect AI can be used for:
+
+- Student tutoring
+- Resume review
+- Web development support
+- Career mentoring
+- Food donation coordination
+- Volunteer matching
+- Community service coordination
+- Small business technical support
 
 ## Tech Stack
 
+- Python
+- Flask
+- SQLite
 - HTML
 - CSS
-- JavaScript
+- Jinja Templates
 
-## Future Improvements
+## How the AI-Style Matching Works
 
-- Add AI API integration
-- Add user profile saving
-- Add more career roles
-- Add skill-gap analysis
-- Add charts for skill matching
-- Add dark/light mode toggle
+The system compares help offers and help requests using:
 
-## Purpose
+- Skill similarity
+- Category match
+- Request urgency
+- Helper availability
 
-This project was created as a practical GitHub portfolio project to demonstrate frontend development, JavaScript logic, and career recommendation functionality.
+Each match receives a score from 0% to 100%.
 
-## Author
+## How to Run Locally
 
-Muhammad Danish Zulkafli  
-GitHub: https://github.com/DanishZulkafli
+Install dependencies:
+
+```bash
+pip install -r requirements.txt
