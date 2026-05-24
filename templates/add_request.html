@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="form-card">
+    <h2>Request Help</h2>
+
+    <form method="POST">
+        <label>Request Title</label>
+        <input type="text" name="title" placeholder="Example: Need help with my resume" required>
+
+        <label>Category</label>
+        <select name="category" required>
+            <option>Education</option>
+            <option>Technology</option>
+            <option>Career</option>
+            <option>Health</option>
+            <option>Community Service</option>
+            <option>Design</option>
+        </select>
+
+        <label>Needed Skills</label>
+        <input type="text" name="needed_skills" placeholder="Example: resume, writing, career" required>
+
+        <label>Urgency</label>
+        <select name="urgency" required>
+            <option>Low</option>
+            <option>Medium</option>
+            <option>High</option>
+        </select>
+
+        <label>Description</label>
+        <textarea name="description" placeholder="Explain what help you need"></textarea>
+
+        <button type="submit">Submit Request</button>
+    </form>
+</div>
+
+{% endblock %}
