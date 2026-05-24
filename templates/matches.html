@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>AI-Style Community Matches</h1>
+<p class="subtitle">
+    These matches are recommended based on category, skills, urgency, and availability.
+</p>
+
+{% if match_results %}
+    {% for item in match_results %}
+        <div class="match-card">
+            <div class="score">{{ item.score }}% Match</div>
+
+            <h2>{{ item.request.title }}</h2>
+            <p><strong>Requested by:</strong> {{ item.request.name }} — {{ item.request.location }}</p>
+            <p><strong>Needs:</strong> {{ item.request.needed_skills }}</p>
+            <p><strong>Urgency:</strong> {{ item.request.urgency }}</p>
+
+            <hr>
+
+            <h3>Recommended Helper</h3>
+            <p><strong>{{ item.offer.name }}</strong> — {{ item.offer.location }}</p>
+            <p><strong>Offer:</strong> {{ item.offer.title }}</p>
+            <p><strong>Skills:</strong> {{ item.offer.skills }}</p>
+            <p><strong>Availability:</strong> {{ item.offer.availability }}</p>
+
+            {% if item.matched_skills %}
+                <p><strong>Matched Skills:</strong> {{ ", ".join(item.matched_skills) }}</p>
+            {% endif %}
+        </div>
+    {% endfor %}
+{% else %}
+    <div class="card">
+        <p>No matches found yet. Add more offers and requests to generate matches.</p>
+    </div>
+{% endif %}
+
+{% endblock %}
