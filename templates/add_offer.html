@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="form-card">
+    <h2>Add Help Offer</h2>
+
+    <form method="POST">
+        <label>Offer Title</label>
+        <input type="text" name="title" placeholder="Example: I can review resumes" required>
+
+        <label>Category</label>
+        <select name="category" required>
+            <option>Education</option>
+            <option>Technology</option>
+            <option>Career</option>
+            <option>Health</option>
+            <option>Community Service</option>
+            <option>Design</option>
+        </select>
+
+        <label>Skills</label>
+        <input type="text" name="skills" placeholder="Example: resume, writing, career" required>
+
+        <label>Availability</label>
+        <select name="availability" required>
+            <option>Weekday</option>
+            <option>Weekend</option>
+            <option>Flexible</option>
+        </select>
+
+        <label>Description</label>
+        <textarea name="description" placeholder="Describe how you can help"></textarea>
+
+        <button type="submit">Add Offer</button>
+    </form>
+</div>
+
+{% endblock %}
