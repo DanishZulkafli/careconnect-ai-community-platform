@@ -119,8 +119,17 @@ def register():
         try:
             conn = get_db()
             conn.execute(
-                "INSERT INTO users (name, email, password, location, created_at) VALUES (?, ?, ?, ?, ?)",
-                (name, email, password, location, datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+                """
+                INSERT INTO users (name, email, password, location, created_at)
+                VALUES (?, ?, ?, ?, ?)
+                """,
+                (
+                    name,
+                    email,
+                    password,
+                    location,
+                    datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                )
             )
             conn.commit()
             conn.close()
@@ -169,15 +178,28 @@ def dashboard():
 
     conn = get_db()
 
-    user = conn.execute("SELECT * FROM users WHERE id = ?", (session["user_id"],)).fetchone()
-    offers = conn.execute("SELECT * FROM offers WHERE user_id = ?", (session["user_id"],)).fetchall()
-    requests = conn.execute("SELECT * FROM requests WHERE user_id = ?", (session["user_id"],)).fetchall()
+    user = conn.execute(
+        "SELECT * FROM users WHERE id = ?",
+        (session["user_id"],)
+    ).fetchone()
+
+    offers = conn.execute(
+        "SELECT * FROM offers WHERE user_id = ? ORDER BY id DESC",
+        (session["user_id"],)
+    ).fetchall()
+
+    requests_list = conn.execute(
+        "SELECT * FROM requests WHERE user_id = ? ORDER BY id DESC",
+        (session["user_id"],)
+    ).fetchall()
 
     conn.close()
 
     badge = "Starter"
+
     if user["points"] >= 50:
         badge = "Community Helper"
+
     if user["points"] >= 100:
         badge = "Impact Maker"
 
@@ -185,7 +207,7 @@ def dashboard():
         "dashboard.html",
         user=user,
         offers=offers,
-        requests=requests,
+        requests=requests_list,
         badge=badge
     )
 
@@ -197,20 +219,29 @@ def add_offer():
 
     if request.method == "POST":
         conn = get_db()
-        conn.execute("""
-            INSERT INTO offers (user_id, title, category, skills, availability, description, created_at)
-            VALUES (?, ?, ?, ?, ?, ?, ?)
-        """, (
-            session["user_id"],
-            request.form["title"],
-            request.form["category"],
-            request.form["skills"],
-            request.form["availability"],
-            request.form["description"],
-            datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        ))
 
-        conn.execute("UPDATE users SET points = points + 10 WHERE id = ?", (session["user_id"],))
+        conn.execute(
+            """
+            INSERT INTO offers 
+            (user_id, title, category, skills, availability, description, created_at)
+            VALUES (?, ?, ?, ?, ?, ?, ?)
+            """,
+            (
+                session["user_id"],
+                request.form["title"],
+                request.form["category"],
+                request.form["skills"],
+                request.form["availability"],
+                request.form["description"],
+                datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            )
+        )
+
+        conn.execute(
+            "UPDATE users SET points = points + 10 WHERE id = ?",
+            (session["user_id"],)
+        )
+
         conn.commit()
         conn.close()
 
@@ -227,18 +258,23 @@ def add_request():
 
     if request.method == "POST":
         conn = get_db()
-        conn.execute("""
-            INSERT INTO requests (user_id, title, category, needed_skills, urgency, description, created_at)
+
+        conn.execute(
+            """
+            INSERT INTO requests
+            (user_id, title, category, needed_skills, urgency, description, created_at)
             VALUES (?, ?, ?, ?, ?, ?, ?)
-        """, (
-            session["user_id"],
-            request.form["title"],
-            request.form["category"],
-            request.form["needed_skills"],
-            request.form["urgency"],
-            request.form["description"],
-            datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        ))
+            """,
+            (
+                session["user_id"],
+                request.form["title"],
+                request.form["category"],
+                request.form["needed_skills"],
+                request.form["urgency"],
+                request.form["description"],
+                datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            )
+        )
 
         conn.commit()
         conn.close()
@@ -256,17 +292,23 @@ def matches():
 
     conn = get_db()
 
-    offers = conn.execute("""
+    offers = conn.execute(
+        """
         SELECT offers.*, users.name, users.location
         FROM offers
         JOIN users ON offers.user_id = users.id
-    """).fetchall()
+        ORDER BY offers.id DESC
+        """
+    ).fetchall()
 
-    requests_list = conn.execute("""
+    requests_list = conn.execute(
+        """
         SELECT requests.*, users.name, users.location
         FROM requests
         JOIN users ON requests.user_id = users.id
-    """).fetchall()
+        ORDER BY requests.id DESC
+        """
+    ).fetchall()
 
     conn.close()
 
@@ -285,11 +327,19 @@ def matches():
                         "matched_skills": matched_skills
                     })
 
-    match_results = sorted(match_results, key=lambda x: x["score"], reverse=True)
+    match_results = sorted(
+        match_results,
+        key=lambda x: x["score"],
+        reverse=True
+    )
 
     return render_template("matches.html", match_results=match_results)
 
 
+# Important for deployment:
+# This initializes the SQLite database when the app is loaded by Render/Gunicorn.
+init_db()
+
+
 if __name__ == "__main__":
-    init_db()
     app.run(debug=True)
