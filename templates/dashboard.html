@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>Welcome, {{ user.name }}</h1>
+
+<section class="dashboard-grid">
+    <div class="card">
+        <h3>Your Points</h3>
+        <h2>{{ user.points }}</h2>
+        <p>Badge: <strong>{{ badge }}</strong></p>
+    </div>
+
+    <div class="card">
+        <h3>Quick Actions</h3>
+        <a class="btn small" href="{{ url_for('add_offer') }}">Add Help Offer</a>
+        <a class="btn small secondary" href="{{ url_for('add_request') }}">Request Help</a>
+    </div>
+</section>
+
+<section class="two-column">
+    <div class="card">
+        <h2>Your Offers</h2>
+
+        {% if offers %}
+            {% for offer in offers %}
+                <div class="list-item">
+                    <strong>{{ offer.title }}</strong>
+                    <p>{{ offer.category }} | {{ offer.skills }}</p>
+                    <small>{{ offer.availability }}</small>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>No help offers yet.</p>
+        {% endif %}
+    </div>
+
+    <div class="card">
+        <h2>Your Requests</h2>
+
+        {% if requests %}
+            {% for req in requests %}
+                <div class="list-item">
+                    <strong>{{ req.title }}</strong>
+                    <p>{{ req.category }} | {{ req.needed_skills }}</p>
+                    <small>Urgency: {{ req.urgency }}</small>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>No help requests yet.</p>
+        {% endif %}
+    </div>
+</section>
+
+{% endblock %}
