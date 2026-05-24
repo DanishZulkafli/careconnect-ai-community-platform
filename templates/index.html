@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<section class="hero">
+    <span class="tag">AI for Community Impact</span>
+    <h1>Connect people who need help with people who can help.</h1>
+    <p>
+        CareConnect AI is a community help and skill-sharing platform that uses
+        AI-style matching to recommend volunteers, learners, and support opportunities.
+    </p>
+
+    {% if not session.get("user_id") %}
+        <a class="btn" href="{{ url_for('register') }}">Join the Community</a>
+    {% else %}
+        <a class="btn" href="{{ url_for('dashboard') }}">Go to Dashboard</a>
+    {% endif %}
+</section>
+
+<section class="stats">
+    <div class="stat-card">
+        <h2>{{ total_users }}</h2>
+        <p>Community Members</p>
+    </div>
+    <div class="stat-card">
+        <h2>{{ total_offers }}</h2>
+        <p>Help Offers</p>
+    </div>
+    <div class="stat-card">
+        <h2>{{ total_requests }}</h2>
+        <p>Help Requests</p>
+    </div>
+</section>
+
+<section class="info-grid">
+    <div class="card">
+        <h3>Offer Help</h3>
+        <p>Share your skills such as web development, tutoring, design, resume review, or volunteering.</p>
+    </div>
+
+    <div class="card">
+        <h3>Request Help</h3>
+        <p>Ask for support from the community based on your needs and urgency.</p>
+    </div>
+
+    <div class="card">
+        <h3>AI-Style Matching</h3>
+        <p>The system recommends matches by comparing categories, skills, urgency, and availability.</p>
+    </div>
+</section>
+
+{% endblock %}
